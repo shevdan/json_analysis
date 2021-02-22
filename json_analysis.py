@@ -1,8 +1,16 @@
+'''
+Programm that allows user to search through the json file
+and get needed information.
+'''
+
 import json, jmespath
 from pprint import pprint
 from os.path import exists
 
-def user_interaction() -> str:
+def path_input() -> str:
+    '''
+    Gets path to the file from the user
+    '''
     path = input(
         'Please, insert full path to the json file you want to analyse\n'
     )
@@ -11,17 +19,17 @@ def user_interaction() -> str:
 
 def read_json_file(path: str) -> dict:
     '''
+    Converts information from json file into te python dictionary
     '''
     with open(path) as file:
         json_info = json.load(file)
     return json_info
 
-def invalid_input() -> str:
-    value = input('Invalid input. PLease, try again:\n')
-    return value
-
 
 def analyze_json(json_info: dict):
+    '''
+    Operates over the info of json file and implements interaction with a user
+    '''
     while True:
         if isinstance(json_info, dict):
             keys_info_lst = list(json_info.keys())
@@ -33,7 +41,7 @@ or press "Enter" to quit the programm.\n')
             if len(key) < 1:
                 print('Thank you for using the programm!')
                 break
-            
+            #check for invalid data
             try:
                 json_info = json_info[key]
             except KeyError:
@@ -58,14 +66,12 @@ def main():
     '''
     Main function combining everything into a working project
     '''
-    path = user_interaction()
+    path = path_input()
     if not exists(path):
         while not exists(path):
             path = input('Path is invalid, please, enter valid path to the json file:\n')
     json_info = read_json_file(path)
     analyze_json(json_info)
 
-
 if __name__ == '__main__':
     main()
-    #print(exists('/Users/shevdan/Documents/Programming/Python/semester2/lab3/twitter_json/user_timeline_of'))
